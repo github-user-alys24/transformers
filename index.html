@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>transformation week</title>
+  <link rel="stylesheet" href="https://use.typekit.net/rfb8byk.css">
+  <style>
+    html {
+      font-family: "ff-providence-sans-web-pro", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 14px;
+    }
+    .bld {
+      font-family: "ff-providence-sans-web-pro", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+    }
+	.coloured {
+      font-family: "ff-providence-sans-web-pro", sans-serif;
+      font-weight: 700;
+	  color:brown;
+	  font-size:18px;
+      font-style: normal;
+    }
+    .flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+      position: relative;
+      text-align: center;
+      flex-direction: column;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+	  font-family: "ff-providence-sans-web-pro", sans-serif;
+      font-weight: 500;
+      font-style: normal;
+      font-size: 14px;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+	  background-color: #fbf0d8;
+	  border-radius: 10px; 
+      transition: background-color 0.3s, transform 0.2s;
+    }
+	button:hover {
+		background-color: #d2c98a;
+		transform: scale(1.1); 
+		color:#ffffff;
+	}
+    img.unselectable {
+      user-select: none;
+	  max-width: 300px;
+      height: 300px;
+	  padding-bottom:15px;
+    }
+	img.start {
+	  max-width: 500px;
+      height: 800px;
+	  padding-bottom:15px;
+	  padding-top:15px;
+	  text-align:center;
+    }	
+	img.final {
+	  max-width: 300px;
+      height: 300px;
+	  padding-bottom:15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="flex" id="welcome-screen">
+    <img id="start-image" src="gingham.jpg" alt="Welcome Image" class="start">
+    <button id="start-button" onclick="startTest()" style="font-size:20px;padding: 15px 100px;;">Start</button>
+  </div>
+
+  <div class="flex hidden" id="test-screen">
+    <div>
+      <h2 style="padding-top:70px;" class="bld" id="question-text"></h2>
+      <img id="question-image" class="unselectable" src="" alt="Question Image">
+      <div id="answer-buttons"></div>
+    </div>
+  </div>
+
+  <script>
+    const personalities = { 
+      "Assisted Writing": 0, // Supportive, creative, and imaginative
+      "Task/Project Management": 0, // Organized, detail-oriented, and decisive
+      "Meeting & Events Management": 0, // Personable, resourceful, and proactive
+      "Data Analysis": 0, // Analytical, curious, and methodical
+      "Query Handling": 0, // Attentive, resourceful, and solutioning
+	};
+
+    const choiceBank = {
+      "1": {
+        "text": "You've just landed in Transformationville!\nThe first thing you choose to do..",
+        "image": "gingham.jpg",
+        "choices": {
+          "Explore on my own": [4, ["Data Analysis"]],
+          "Look for someone": [4, ["Meeting & Events Management","Task/Project Management"]],
+		  "Are there any tour guides around?": [4, ["Assisted Writing","Query Handling"]]
+        }
+      },
+      "4": {
+        "text": "Question 4?",
+        "image": "gingham.jpg",
+        "choices": {
+          "Hurray!": [null, []],
+        }
+      }
+    };
+
+	const imageUrls = {
+      "Assisted Writing": "gingham.jpg",
+      "Task/Project Management": "gingham.jpg",
+      "Meeting & Events Management": "gingham.jpg", 
+      "Data Analysis": "gingham.jpg", 
+      "Query Handling": "gingham.jpg", 
+	};
+
+    let currentQuestionIndex = 1;
+    const answers = [];
+
+    function startTest() {
+      document.getElementById("welcome-screen").classList.add("hidden");
+      document.getElementById("test-screen").classList.remove("hidden");
+
+      showQuestion(currentQuestionIndex);
+    }
+
+    function showQuestion(questionIndex) {
+      const questionData = choiceBank[questionIndex];
+      document.getElementById("question-text").innerText = questionData.text;
+      document.getElementById("question-image").src = questionData.image;
+      createButtons(questionData.choices);
+    }
+
+    function handleAnswer(choice, nextQuestionIndex, nextChoices) {
+      answers.push(choice);
+      
+      // Update personality scores
+      nextChoices.forEach(choice => {
+        personalities[choice]++;
+      });
+
+      currentQuestionIndex = nextQuestionIndex;
+
+      if (currentQuestionIndex) {
+        showQuestion(currentQuestionIndex);
+      } else {
+        finishTest();
+      }
+    }
+
+    function createButtons(choices) {
+      const answerButtons = document.getElementById("answer-buttons");
+      answerButtons.innerHTML = ""; // Clear previous buttons
+
+      for (let choice in choices) {
+        const [nextQuestionIndex, nextChoices] = choices[choice];
+
+        const button = document.createElement("button");
+        button.innerText = choice;
+        button.onclick = () => handleAnswer(choice, nextQuestionIndex, nextChoices);
+        answerButtons.appendChild(button);
+      }
+    }
+	
+	function copyURL() {
+		const url = window.location.href;
+		
+		navigator.clipboard.writeText(url).then(() => {
+			alert('URL copied to clipboard!');
+		}).catch(err => {
+			console.error('Failed to copy: ', err);
+		});
+        }
+
+	function finishTest() {
+	  const highestPersonality = Object.keys(personalities).reduce((a, b) => personalities[a] > personalities[b] ? a : b);
+	  const finalImg = imageUrls[highestPersonality];
+	  
+	  document.getElementById("test-screen").innerHTML = `
+		<h2 class="bld" style="padding-top:70px;">Tada!<br></h2>
+		<h3>You got: <span class="coloured">${highestPersonality}</span>!</h3>
+		<img id="final-image" class="final" src="${finalImg}" alt="Image for ${highestPersonality}">
+		<button onclick="copyURL()">Share the test!</button>
+		<button id="refreshButton">Take the Test Again</button>
+	  `;
+
+	  // Add the event listener for the refresh button to reload the page
+	  document.getElementById('refreshButton').addEventListener('click', function() {
+		location.reload();
+	  });
+	}
+	
+  </script>
+</body>
+</html>
