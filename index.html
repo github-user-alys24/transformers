@@ -9,7 +9,6 @@
     html {
       font-family: "ff-providence-sans-web-pro", sans-serif;
       font-weight: 400;
-      color:black;
       font-style: normal;
       font-size: 12px;
     }
@@ -41,14 +40,13 @@
 	  font-family: "ff-providence-sans-web-pro", sans-serif;
       font-weight: 500;
       font-style: normal;
-      font-size: 16px;
+      font-size: 14px;
       margin: 10px;
       padding: 10px 20px;
       cursor: pointer;
-      color:black;
 	  background-color: #fbf0d8;
 	  border-radius: 10px; 
-      transition: background-color 0.3s, transform 0.2s;
+      transition: background-color 0.4s, transform 2s;
     }
 	button:hover {
 		background-color: #d2c98a;
@@ -64,8 +62,8 @@
 	img.start {
 	  max-width: 500px;
       height: 800px;
+	  padding-top:25px;
 	  padding-bottom:15px;
-	  padding-top:15px;
 	  text-align:center;
     }	
 	img.final {
@@ -109,7 +107,7 @@
         }
       },
       "4": {
-        "text": "Question 4?",
+        "text": "work in progress..",
         "image": "gingham.jpg",
         "choices": {
           "Hurray!": [null, []],
@@ -142,22 +140,26 @@
       createButtons(questionData.choices);
     }
 
-    function handleAnswer(choice, nextQuestionIndex, nextChoices) {
-      answers.push(choice);
-      
-      // Update personality scores
-      nextChoices.forEach(choice => {
-        personalities[choice]++;
-      });
+	function handleAnswer(choice, nextQuestionIndex, nextChoices) {
+	  answers.push(choice);
+	  nextChoices.forEach(choice => {
+		personalities[choice]++;
+	  });
 
-      currentQuestionIndex = nextQuestionIndex;
+	  const buttons = document.querySelectorAll('#answer-buttons button');
+	  buttons.forEach(button => button.disabled = true);
+	  setTimeout(() => {
+		currentQuestionIndex = nextQuestionIndex;
 
-      if (currentQuestionIndex) {
-        showQuestion(currentQuestionIndex);
-      } else {
-        finishTest();
-      }
-    }
+		if (currentQuestionIndex) {
+		  showQuestion(currentQuestionIndex);
+		} else {
+		  finishTest();
+		}
+
+		buttons.forEach(button => button.disabled = false);
+	  }, 250);
+	}
 
     function createButtons(choices) {
       const answerButtons = document.getElementById("answer-buttons");
