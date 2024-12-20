@@ -11,6 +11,7 @@
       font-weight: 400;
       font-style: normal;
       font-size: 12px;
+	  color:black;
     }
     .bld {
       font-family: "ff-providence-sans-web-pro", sans-serif;
@@ -38,13 +39,13 @@
     }
     button {
 	  font-family: "ff-providence-sans-web-pro", sans-serif;
+	  color:black;
       font-weight: 500;
       font-style: normal;
       font-size: 14px;
       margin: 10px;
       padding: 10px 20px;
       cursor: pointer;
-	  color:black;
 	  background-color: #fbf0d8;
 	  border-radius: 10px; 
       transition: background-color 0.4s, transform 2s;
@@ -76,7 +77,7 @@
 </head>
 <body>
   <div class="flex" id="welcome-screen">
-    <img id="start-image" src="gingham.jpg" alt="Welcome Image" class="start">
+    <img id="start-image" src="./img/start.jpg" alt="Welcome Image" class="start">
     <button id="start-button" onclick="startTest()" style="font-size:20px;padding: 15px 100px;;">Start</button>
   </div>
 
@@ -99,17 +100,47 @@
 
     const choiceBank = {
       "1": {
-        "text": "You've just landed in Transformationville!\nThe first thing you choose to do..",
-        "image": "gingham.jpg",
+        "text": "You received a call from the President..\nTransformationville needs your help!",
+        "image": "./img/img1.png",
         "choices": {
-          "Explore on my own": [4, ["Data Analysis"]],
-          "Look for someone": [4, ["Meeting & Events Management","Task/Project Management"]],
-		  "Are there any tour guides around?": [4, ["Assisted Writing","Query Handling"]]
+          "I'm on the way!": [2,[]],
         }
       },
-      "4": {
+	  //
+      "2": {
+        "text": "You travel the vast skies..\nYou grow bored of the blue sky..",
+        "image": "./img/img2.png",
+        "choices": {
+          "Call up your friends": [23, ["Task/Project Management","Meeting & Events Management"]],
+		  "Solve puzzles": [22, ["Data Analysis","Query Handling"]],
+		  "Use your binoculars": [21, ["Assisted Writing"]]
+        }
+      },
+	  "21": {
+        "text": "Wow.. What a view!",
+        "image": "./img/img21.png",
+        "choices": {
+          "Continue": [3, []]
+        }
+      },
+	  "22": {
+        "text": "You solve puzzles to pass time..\nYou lost a couple pieces but it's fine..",
+        "image": "./img/img22.png",
+        "choices": {
+          "Continue": [3, []]
+        }
+      },
+	  "23": {
+        "text": "You call up a friend.\nYou enjoy their company nonetheless.",
+        "image": "./img/img23.png",
+        "choices": {
+          "Continue": [3, []]
+        }
+      },
+	  //
+	  "3": {
         "text": "work in progress..",
-        "image": "gingham.jpg",
+        "image": "./img/img3.png",
         "choices": {
           "Hurray!": [null, []],
         }
